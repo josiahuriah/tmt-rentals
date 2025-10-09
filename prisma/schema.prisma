@@ -1,0 +1,224 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Admin user management
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("STAFF") // STAFF, MANAGER, SUPER_ADMIN
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBookings Booking[] @relation("CreatedBy")
+  updatedBookings Booking[] @relation("UpdatedBy")
+}
+
+// Car categories (Economy, Sedan, SUV, etc.)
+model CarCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique // "Economy", "Sedan", "Van", "SUV", "Luxury"
+  description String?
+  pricePerDay Decimal  @db.Decimal(10, 2)
+  imagePath   String?
+  features    Json? // JSON array of features like ["AC", "Automatic", "5 Seats"]
+  isActive    Boolean  @default(true)
+  displayOrder Int     @default(0) // For ordering categories on the frontend
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  cars Car[]
+  bookings Booking[]
+
+  @@index([isActive, displayOrder])
+}
+
+// Individual cars in inventory
+model Car {
+  id           String   @id @default(uuid())
+  categoryId   String
+  name         String // "Chevy Cruze", "Kia Forte", etc.
+  model        String? // "2023", "2024"
+  licensePlate String?  @unique
+  vin          String?  @unique
+  color        String?
+  year         Int?
+  mileage      Int?
+  status       String   @default("AVAILABLE") // AVAILABLE, RENTED, MAINTENANCE, RETIRED
+  notes        String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  category          CarCategory        @relation(fields: [categoryId], references: [id])
+  bookings          Booking[]
+  maintenanceRecords MaintenanceRecord[]
+  unavailabilityPeriods UnavailabilityPeriod[]
+
+  @@index([categoryId])
+  @@index([status])
+}
+
+// Customer information
+model Customer {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  homePhone String?
+  address   String?
+  city      String?
+  state     String?
+  zipCode   String?
+  country   String   @default("Bahamas")
+  notes     String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings Booking[]
+
+  @@index([email])
+  @@index([phone])
+}
+
+// Main booking/reservation model
+model Booking {
+  id              String   @id @default(uuid())
+  bookingNumber   String   @unique // Auto-generated: "BK-20250108-0001"
+  customerId      String
+  carId           String?  // Specific car assigned (can be null initially)
+  categoryId      String   // Category booked
+  
+  // Dates
+  pickupDate      DateTime
+  returnDate      DateTime
+  actualPickupDate DateTime?
+  actualReturnDate DateTime?
+  
+  // Pricing
+  pricePerDay     Decimal  @db.Decimal(10, 2)
+  numberOfDays    Int
+  subtotal        Decimal  @db.Decimal(10, 2)
+  taxAmount       Decimal  @default(0) @db.Decimal(10, 2)
+  totalAmount     Decimal  @db.Decimal(10, 2)
+  depositAmount   Decimal  @default(100) @db.Decimal(10, 2) // $100 security deposit
+  
+  // Additional fees
+  pickupFee       Decimal  @default(0) @db.Decimal(10, 2) // $10 for pickup beyond Deadman's Cay
+  additionalDriverFee Decimal @default(0) @db.Decimal(10, 2)
+  
+  // Additional driver info
+  additionalDriver String?
+  
+  // Status tracking
+  status          String   @default("PENDING") // PENDING, CONFIRMED, ACTIVE, COMPLETED, CANCELLED
+  paymentStatus   String   @default("UNPAID") // UNPAID, PARTIAL, PAID
+  
+  // Pickup/Return details
+  pickupLocation  String   @default("Deadman's Cay, Bahamas")
+  returnLocation  String   @default("Deadman's Cay, Bahamas")
+  
+  // Notes and special requirements
+  specialRequests String?  @db.Text
+  internalNotes   String?  @db.Text
+  cancellationReason String? @db.Text
+  
+  // Tracking
+  createdById     String?
+  updatedById     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  cancelledAt     DateTime?
+  
+  customer  Customer     @relation(fields: [customerId], references: [id])
+  car       Car?         @relation(fields: [carId], references: [id])
+  category  CarCategory  @relation(fields: [categoryId], references: [id])
+  createdBy Admin?       @relation("CreatedBy", fields: [createdById], references: [id])
+  updatedBy Admin?       @relation("UpdatedBy", fields: [updatedById], references: [id])
+  payments  Payment[]
+
+  @@index([customerId])
+  @@index([carId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([pickupDate, returnDate])
+  @@index([bookingNumber])
+}
+
+// Payment tracking
+model Payment {
+  id              String   @id @default(uuid())
+  bookingId       String
+  amount          Decimal  @db.Decimal(10, 2)
+  paymentMethod   String   // CASH, CREDIT_CARD, DEBIT_CARD, BANK_TRANSFER
+  paymentStatus   String   @default("PENDING") // PENDING, COMPLETED, FAILED, REFUNDED
+  transactionId   String?
+  paymentDate     DateTime @default(now())
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([paymentStatus])
+}
+
+// Track when cars are unavailable (maintenance, etc.)
+model UnavailabilityPeriod {
+  id        String   @id @default(uuid())
+  carId     String
+  startDate DateTime
+  endDate   DateTime
+  reason    String   // MAINTENANCE, REPAIR, RESERVED, OTHER
+  notes     String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  car Car @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@index([carId])
+  @@index([startDate, endDate])
+}
+
+// Track car maintenance
+model MaintenanceRecord {
+  id             String   @id @default(uuid())
+  carId          String
+  maintenanceType String  // OIL_CHANGE, TIRE_ROTATION, INSPECTION, REPAIR, etc.
+  description    String   @db.Text
+  cost           Decimal? @db.Decimal(10, 2)
+  performedDate  DateTime
+  nextDueDate    DateTime?
+  performedBy    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  car Car @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@index([carId])
+  @@index([performedDate])
+}
+
+// Contact form submissions
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  message   String   @db.Text
+  status    String   @default("UNREAD") // UNREAD, READ, RESPONDED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}

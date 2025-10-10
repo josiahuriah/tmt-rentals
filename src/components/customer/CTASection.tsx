@@ -48,26 +48,26 @@ export function CTASection() {
           {/* Contact Info */}
           <div className="pt-8 border-t border-gray-700">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-gray-300">
-              
+              <a
                 href="tel:+12424720016"
                 className="flex items-center gap-2 hover:text-brand-gold-500 transition-colors"
-              <a>
+              >
                 <Phone className="w-5 h-5" />
                 <span>+1 (242) 472-0016</span>
               </a>
               <span className="hidden sm:block">•</span>
-              
+              <a
                 href="tel:+12423670942"
                 className="flex items-center gap-2 hover:text-brand-gold-500 transition-colors"
-              <a>
+              >
                 <Phone className="w-5 h-5" />
                 <span>+1 (242) 367-0942</span>
               </a>
               <span className="hidden sm:block">•</span>
-              
+              <a
                 href="mailto:info@tmtsbahamas.com"
                 className="flex items-center gap-2 hover:text-brand-gold-500 transition-colors"
-              <a>
+              >
                 <Mail className="w-5 h-5" />
                 <span>info@tmtsbahamas.com</span>
               </a>

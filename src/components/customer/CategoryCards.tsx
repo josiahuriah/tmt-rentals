@@ -24,7 +24,7 @@ export async function CategoryCards() {
 
   return (
     <section className="py-20 bg-white">
-      <div className="container space-y-12">
+      <div className="container mx-auto px-4 max-w-7xl space-y-12">
         {/* Section Header */}
         <div className="text-center space-y-4">
           <h2 className="text-4xl md:text-5xl font-bold">
@@ -41,7 +41,7 @@ export async function CategoryCards() {
           {categories.map((category) => (
             <Card
               key={category.id}
-              className="group overflow-hidden hover:shadow-xl transition-all duration-300 border-2 hover:border-brand-gold-500"
+              className="group overflow-hidden hover:shadow-xl transition-all duration-300 border-2 hover:border-brand-red-500"
             >
               <CardHeader className="p-0">
                 <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
@@ -59,7 +59,7 @@ export async function CategoryCards() {
                   )}
                   {/* Overlay Badge */}
                   <div className="absolute top-4 right-4">
-                    <Badge className="bg-brand-gold-500 text-black font-semibold">
+                    <Badge className="bg-brand-red-500 text-white font-semibold">
                       {formatCurrency(Number(category.pricePerDay))}/day
                     </Badge>
                   </div>
@@ -108,7 +108,7 @@ export async function CategoryCards() {
               <CardFooter className="p-6 pt-0">
                 <Button
                   asChild
-                  className="w-full bg-black hover:bg-black/90 text-brand-gold-500 font-semibold"
+                  className="w-full bg-black hover:bg-black/90 text-brand-red-500 font-semibold"
                   disabled={category.cars.length === 0}
                 >
                   <Link href={`/rental?category=${category.id}`}>

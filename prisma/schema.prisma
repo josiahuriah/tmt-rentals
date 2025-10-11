@@ -71,7 +71,7 @@ model Customer {
   id        String   @id @default(uuid())
   firstName String
   lastName  String
-  email     String
+  email     String   @unique  
   phone     String
   homePhone String?
   address   String?
@@ -85,7 +85,6 @@ model Customer {
 
   bookings Booking[]
 
-  @@index([email])
   @@index([phone])
 }
 

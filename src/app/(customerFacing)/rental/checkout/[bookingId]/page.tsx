@@ -30,9 +30,21 @@ export default async function CheckoutPage({
     notFound()
   }
 
+  // Convert Decimals to numbers for Client Component
+  const bookingData = {
+    id: booking.id,
+    bookingNumber: booking.bookingNumber,
+    totalAmount: Number(booking.totalAmount),
+    customer: {
+      firstName: booking.customer.firstName,
+      lastName: booking.customer.lastName,
+      email: booking.customer.email,
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12">
-      <div className="container max-w-6xl">
+      <div className="container mx-auto px-4 max-w-6xl">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Secure Checkout</h1>
           <p className="text-muted-foreground">
@@ -51,7 +63,7 @@ export default async function CheckoutPage({
                 </p>
               </CardHeader>
               <CardContent>
-                <CheckoutForm booking={booking} />
+                <CheckoutForm booking={bookingData} />
               </CardContent>
             </Card>
           </div>
@@ -64,7 +76,7 @@ export default async function CheckoutPage({
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Booking Number */}
-                <div className="bg-brand-gold-50 p-3 rounded-lg text-center">
+                <div className="bg-brand-red-50 p-3 rounded-lg text-center">
                   <p className="text-xs text-muted-foreground mb-1">Booking Number</p>
                   <p className="font-bold text-lg">{booking.bookingNumber}</p>
                 </div>
@@ -150,7 +162,7 @@ export default async function CheckoutPage({
                   <Separator />
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total Amount</span>
-                    <span className="text-brand-gold-600">
+                    <span className="text-brand-red-600">
                       {formatCurrency(Number(booking.totalAmount))}
                     </span>
                   </div>

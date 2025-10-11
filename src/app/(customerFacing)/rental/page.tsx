@@ -27,7 +27,7 @@ export default async function RentalPage() {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Hero Section */}
       <section className="bg-black text-white py-16">
-        <div className="container">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="max-w-3xl mx-auto text-center space-y-4">
             <h1 className="text-5xl font-bold">Book Your Island Ride</h1>
             <p className="text-xl text-gray-300">
@@ -39,7 +39,7 @@ export default async function RentalPage() {
 
       {/* Main Content */}
       <section className="py-12">
-        <div className="container space-y-12">
+        <div className="container mx-auto px-4 max-w-7xl space-y-12">
           {/* Date Selection Calendar */}
           <div className="max-w-4xl mx-auto">
             <Card className="border-2">
@@ -70,7 +70,7 @@ export default async function RentalPage() {
               {categories.map((category) => (
                 <Card
                   key={category.id}
-                  className="group overflow-hidden hover:shadow-2xl transition-all duration-300 border-2 hover:border-brand-gold-500"
+                  className="group overflow-hidden hover:shadow-2xl transition-all duration-300 border-2 hover:border-brand-red-500"
                 >
                   <CardHeader className="p-0">
                     <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
@@ -87,7 +87,7 @@ export default async function RentalPage() {
                         </div>
                       )}
                       <div className="absolute top-4 right-4">
-                        <Badge className="bg-brand-gold-500 text-black font-semibold text-base px-3 py-1">
+                        <Badge className="bg-brand-red-500 text-black font-semibold text-base px-3 py-1">
                           {formatCurrency(Number(category.pricePerDay))}/day
                         </Badge>
                       </div>
@@ -134,7 +134,7 @@ export default async function RentalPage() {
                   <CardFooter className="p-6 pt-0">
                     <Button
                       asChild
-                      className="w-full bg-black hover:bg-black/90 text-brand-gold-500 font-semibold h-12 text-base"
+                      className="w-full bg-black hover:bg-black/90 text-brand-red-500 font-semibold h-12 text-base"
                       disabled={category.cars.length === 0}
                     >
                       <Link href={`/rental/booking/${category.id}`}>
@@ -152,7 +152,7 @@ export default async function RentalPage() {
             <CardContent className="p-8">
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div>
-                  <div className="text-3xl font-bold text-brand-gold-600 mb-2">
+                  <div className="text-3xl font-bold text-brand-red-600 mb-2">
                     $0
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -160,7 +160,7 @@ export default async function RentalPage() {
                   </p>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-brand-gold-600 mb-2">
+                  <div className="text-3xl font-bold text-brand-red-600 mb-2">
                     $100
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -168,7 +168,7 @@ export default async function RentalPage() {
                   </p>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-brand-gold-600 mb-2">
+                  <div className="text-3xl font-bold text-brand-red-600 mb-2">
                     $10
                   </div>
                   <p className="text-sm text-muted-foreground">

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-gold-500: #ffd700;
-  --color-brand-gold-600: #e6c200;
+  --color-brand-red-500: #ef4444;
+  --color-brand-red-600: #dc2626;
   
   --color-background: 0 0% 100%;
   --color-foreground: 0 0% 0%;
@@ -11,17 +11,17 @@
   --color-popover: 0 0% 100%;
   --color-popover-foreground: 0 0% 0%;
   --color-primary: 0 0% 0%;
-  --color-primary-foreground: 45 100% 51%;
-  --color-secondary: 45 93% 47%;
+  --color-primary-foreground: 0 84% 60%;
+  --color-secondary: 0 84% 60%;
   --color-secondary-foreground: 0 0% 0%;
   --color-muted: 0 0% 96%;
   --color-muted-foreground: 0 0% 45%;
-  --color-accent: 45 93% 47%;
+  --color-accent: 0 84% 60%;
   --color-accent-foreground: 0 0% 0%;
   --color-destructive: 0 84% 60%;
   --color-border: 0 0% 90%;
   --color-input: 0 0% 90%;
-  --color-ring: 45 93% 47%;
+  --color-ring: 0 84% 60%;
   --radius: 0.5rem;
 }
 
@@ -33,17 +33,17 @@
     --color-card-foreground: 0 0% 100%;
     --color-popover: 0 0% 5%;
     --color-popover-foreground: 0 0% 100%;
-    --color-primary: 45 93% 47%;
+    --color-primary: 0 84% 60%;
     --color-primary-foreground: 0 0% 0%;
     --color-secondary: 0 0% 10%;
     --color-secondary-foreground: 0 0% 100%;
     --color-muted: 0 0% 15%;
     --color-muted-foreground: 0 0% 65%;
-    --color-accent: 45 93% 47%;
+    --color-accent: 0 84% 60%;
     --color-accent-foreground: 0 0% 0%;
     --color-destructive: 0 84% 60%;
     --color-border: 0 0% 15%;
     --color-input: 0 0% 15%;
-    --color-ring: 45 93% 47%;
+    --color-ring: 0 84% 60%;
   }
 }

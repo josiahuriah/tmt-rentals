@@ -42,7 +42,7 @@ export default async function ConfirmationPage({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white py-12">
-      <div className="container max-w-4xl">
+      <div className="container mx-auto px-4 max-w-6xl">
         {/* Success Header */}
         <div className="text-center mb-8 space-y-4">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-green-500 rounded-full mb-4">

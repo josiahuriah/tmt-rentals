@@ -216,7 +216,7 @@ export function BookingForm({ category }: BookingFormProps) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-black hover:bg-black/90 text-brand-gold-500 font-semibold h-12 text-base"
+          className="w-full bg-black hover:bg-black/90 text-brand-red-500 font-semibold h-12 text-base"
         >
           {isSubmitting ? "Processing..." : "Continue to Terms & Conditions"}
         </Button>

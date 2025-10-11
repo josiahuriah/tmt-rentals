@@ -6,7 +6,7 @@ import Image from "next/image"
 export function AboutBanner() {
   return (
     <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-      <div className="container">
+      <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left: Image/Logo */}
           <div className="relative">
@@ -20,7 +20,7 @@ export function AboutBanner() {
               />
             </div>
             {/* Decorative Element */}
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-brand-gold-500 rounded-full opacity-20 blur-3xl" />
+            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-brand-red-500 rounded-full opacity-20 blur-3xl" />
           </div>
 
           {/* Right: Content */}
@@ -39,8 +39,8 @@ export function AboutBanner() {
             <div className="grid grid-cols-2 gap-4 pt-4">
               <div className="flex gap-3">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-lg bg-brand-gold-500/10 flex items-center justify-center">
-                    <Car className="w-5 h-5 text-brand-gold-600" />
+                  <div className="w-10 h-10 rounded-lg bg-brand-red-500/10 flex items-center justify-center">
+                    <Car className="w-5 h-5 text-brand-red-600" />
                   </div>
                 </div>
                 <div>
@@ -53,8 +53,8 @@ export function AboutBanner() {
 
               <div className="flex gap-3">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-lg bg-brand-gold-500/10 flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-brand-gold-600" />
+                  <div className="w-10 h-10 rounded-lg bg-brand-red-500/10 flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-brand-red-600" />
                   </div>
                 </div>
                 <div>
@@ -67,8 +67,8 @@ export function AboutBanner() {
 
               <div className="flex gap-3">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-lg bg-brand-gold-500/10 flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-brand-gold-600" />
+                  <div className="w-10 h-10 rounded-lg bg-brand-red-500/10 flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-brand-red-600" />
                   </div>
                 </div>
                 <div>
@@ -81,8 +81,8 @@ export function AboutBanner() {
 
               <div className="flex gap-3">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-lg bg-brand-gold-500/10 flex items-center justify-center">
-                    <Award className="w-5 h-5 text-brand-gold-600" />
+                  <div className="w-10 h-10 rounded-lg bg-brand-red-500/10 flex items-center justify-center">
+                    <Award className="w-5 h-5 text-brand-red-600" />
                   </div>
                 </div>
                 <div>
@@ -97,7 +97,7 @@ export function AboutBanner() {
             <Button
               asChild
               size="lg"
-              className="bg-black hover:bg-black/90 text-brand-gold-500 font-semibold"
+              className="bg-black hover:bg-black/90 text-brand-red-500 font-semibold"
             >
               <Link href="/rental">Book Your Vehicle</Link>
             </Button>

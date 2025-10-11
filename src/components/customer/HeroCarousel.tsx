@@ -73,22 +73,24 @@ export function HeroCarousel() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
           </div>
 
-          {/* Content */}
-          <div className="relative h-full container flex items-center">
-            <div className="max-w-2xl space-y-6 text-white">
-              <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-                {slide.title}
-              </h1>
-              <p className="text-xl md:text-2xl text-gray-200">
-                {slide.subtitle}
-              </p>
-              <Button
-                asChild
-                size="lg"
-                className="bg-brand-gold-500 hover:bg-brand-gold-600 text-black font-semibold text-lg px-8 py-6"
-              >
-                <Link href="/rental">{slide.cta}</Link>
-              </Button>
+          {/* Content - Centered */}
+          <div className="relative h-full">
+            <div className="container mx-auto px-4 max-w-7xl h-full flex items-center">
+              <div className="max-w-2xl space-y-6 text-white">
+                <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+                  {slide.title}
+                </h1>
+                <p className="text-xl md:text-2xl text-gray-200">
+                  {slide.subtitle}
+                </p>
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-brand-red-500 hover:bg-brand-red-600 text-white font-semibold text-lg px-8 py-6"
+                >
+                  <Link href="/rental">{slide.cta}</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -100,7 +102,7 @@ export function HeroCarousel() {
           prevSlide()
           setIsAutoPlaying(false)
         }}
-        className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+        className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-10"
         aria-label="Previous slide"
       >
         <ChevronLeft className="w-6 h-6" />
@@ -110,14 +112,14 @@ export function HeroCarousel() {
           nextSlide()
           setIsAutoPlaying(false)
         }}
-        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-10"
         aria-label="Next slide"
       >
         <ChevronRight className="w-6 h-6" />
       </button>
 
       {/* Dots Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-10">
         {slides.map((_, index) => (
           <button
             key={index}
@@ -128,7 +130,7 @@ export function HeroCarousel() {
             className={cn(
               "w-2 h-2 rounded-full transition-all",
               index === currentSlide
-                ? "bg-brand-gold-500 w-8"
+                ? "bg-brand-red-500 w-8"
                 : "bg-white/50 hover:bg-white/70"
             )}
             aria-label={`Go to slide ${index + 1}`}

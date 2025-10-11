@@ -1,4 +1,3 @@
-// src/app/(customerFacing)/layout.tsx
 import { Nav, NavLink } from "@/components/Nav"
 import { Footer } from "@/components/Footer"
 import { Button } from "@/components/ui/button"
@@ -14,7 +13,7 @@ export default function CustomerLayout({
     <div className="flex flex-col min-h-screen">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-20 items-center justify-between">
+        <div className="container mx-auto px-4 flex h-20 items-center justify-between max-w-7xl">
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
@@ -36,11 +35,11 @@ export default function CustomerLayout({
           </div>
 
           {/* Book Button */}
-          <Button asChild className="bg-brand-gold-500 hover:bg-brand-gold-600 text-black font-semibold">
+          <Button asChild className="bg-brand-red-500 hover:bg-brand-red-600 text-white font-semibold">
             <Link href="/rental">Book Now</Link>
           </Button>
 
-          {/* Mobile Menu Toggle - We'll add this later */}
+          {/* Mobile Menu Toggle */}
           <button className="md:hidden">
             <svg
               className="w-6 h-6"

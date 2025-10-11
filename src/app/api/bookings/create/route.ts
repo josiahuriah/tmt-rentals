@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import db from "@/db/db"
 import { generateBookingNumber } from "@/lib/availability"
+import { Decimal } from "@prisma/client/runtime/library"
 
 export async function POST(request: NextRequest) {
   try {
@@ -68,7 +69,7 @@ export async function POST(request: NextRequest) {
     // Generate unique booking number
     const bookingNumber = generateBookingNumber()
 
-    // Create booking
+    // Create booking - convert numbers to Decimals
     const booking = await db.booking.create({
       data: {
         bookingNumber,
@@ -77,11 +78,11 @@ export async function POST(request: NextRequest) {
         pickupDate: new Date(pickupDate),
         returnDate: new Date(returnDate),
         numberOfDays,
-        pricePerDay,
-        subtotal,
-        taxAmount,
-        totalAmount,
-        depositAmount,
+        pricePerDay: new Decimal(pricePerDay),
+        subtotal: new Decimal(subtotal),
+        taxAmount: new Decimal(taxAmount),
+        totalAmount: new Decimal(totalAmount),
+        depositAmount: new Decimal(depositAmount),
         additionalDriver: additionalDriver || null,
         specialRequests: specialRequests || null,
         status: "PENDING",

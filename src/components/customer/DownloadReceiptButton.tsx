@@ -48,7 +48,7 @@ export function DownloadReceiptButton({ bookingId }: DownloadReceiptButtonProps)
     <Button
       onClick={handleDownload}
       disabled={isDownloading}
-      className="flex-1 bg-brand-gold-500 hover:bg-brand-gold-600 text-black font-semibold"
+      className="flex-1 bg-brand-red-500 hover:bg-brand-red-600 text-black font-semibold"
     >
       <Download className="w-4 h-4 mr-2" />
       {isDownloading ? "Generating..." : "Download Receipt"}

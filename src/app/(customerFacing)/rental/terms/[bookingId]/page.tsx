@@ -30,7 +30,7 @@ export default function TermsPage({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12">
-      <div className="container max-w-4xl">
+      <div className="container mx-auto px-4 max-w-6xl">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Terms & Conditions</h1>
           <p className="text-muted-foreground">
@@ -156,7 +156,7 @@ export default function TermsPage({
                 <Button
                   onClick={handleContinue}
                   disabled={!accepted || isSubmitting}
-                  className="flex-1 bg-black hover:bg-black/90 text-brand-gold-500 font-semibold"
+                  className="flex-1 bg-black hover:bg-black/90 text-brand-red-500 font-semibold"
                 >
                   {isSubmitting ? "Processing..." : "Accept & Continue to Payment"}
                 </Button>

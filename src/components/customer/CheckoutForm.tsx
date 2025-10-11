@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
+import { Label } from "../ui/label"
 import { CreditCard, Lock } from "lucide-react"
 import { formatCurrency } from "@/lib/formatters"
 
@@ -26,7 +26,6 @@ export function CheckoutForm({ booking }: CheckoutFormProps) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
-  // Payment form state - ready for 3DS integration
   const [paymentData, setPaymentData] = useState({
     cardNumber: "",
     cardholderName: "",
@@ -74,19 +73,57 @@ export function CheckoutForm({ booking }: CheckoutFormProps) {
       }
 
       /**
-       * PAYMENT PROCESSOR INTEGRATION POINT
+       * ============================================================
+       * 3DS PAYMENT PROCESSOR INTEGRATION POINT
+       * ============================================================
        * 
-       * When integrating a 3DS-compliant payment processor:
-       * 1. Replace this section with your payment processor's SDK initialization
-       * 2. Create a payment intent/session with the processor
-       * 3. Handle 3DS authentication flow (redirect or iframe)
-       * 4. Process the payment through the processor's API
-       * 5. Handle success/failure responses
+       * When integrating a 3DS-compliant payment processor (like Stripe, 
+       * Square, or Authorize.net), replace this section with:
        * 
-       * Example structure for Stripe 3DS:
+       * 1. Initialize the payment processor SDK:
+       *    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY)
        * 
-       * const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY)
-       * const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
+       * 2. Create a PaymentIntent on your server:
+       *    const { clientSecret } = await fetch('/api/create-payment-intent', {
+       *      method: 'POST',
+       *      body: JSON.stringify({ amount: booking.totalAmount, bookingId: booking.id })
+       *    }).then(res => res.json())
+       * 
+       * 3. Confirm the payment with 3DS authentication:
+       *    const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
+       *      clientSecret,
+       *      {
+       *        payment_method: {
+       *          card: cardElement, // or use stripe.elements()
+       *          billing_details: {
+       *            name: paymentData.cardholderName,
+       *            email: booking.customer.email
+       *          }
+       *        }
+       *      }
+       *    )
+       * 
+       * 4. Handle 3DS challenge if required:
+       *    - The SDK will automatically display the 3DS challenge modal
+       *    - User completes authentication with their bank
+       *    - Result is returned in the paymentIntent object
+       * 
+       * 5. Verify payment status:
+       *    if (stripeError) throw new Error(stripeError.message)
+       *    if (paymentIntent.status !== 'succeeded') {
+       *      throw new Error('Payment failed or requires additional action')
+       *    }
+       * 
+       * 6. Use the payment processor's transaction ID:
+       *    transactionId = paymentIntent.id
+       * 
+       * Example with Stripe:
+       * ```
+       * const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!)
+       * const elements = stripe.elements()
+       * const cardElement = elements.create('card')
+       * 
+       * const { error, paymentIntent } = await stripe.confirmCardPayment(
        *   clientSecret,
        *   {
        *     payment_method: {
@@ -96,12 +133,18 @@ export function CheckoutForm({ booking }: CheckoutFormProps) {
        *   }
        * )
        * 
-       * if (stripeError) throw new Error(stripeError.message)
-       * if (paymentIntent.status !== 'succeeded') throw new Error('Payment failed')
+       * if (error || paymentIntent.status !== 'succeeded') {
+       *   throw new Error('Payment failed')
+       * }
+       * 
+       * transactionId = paymentIntent.id
+       * ```
+       * ============================================================
        */
 
-      // Simulated payment processing (DEVELOPMENT ONLY)
+      // DEVELOPMENT ONLY: Simulate payment processing
       await new Promise(resolve => setTimeout(resolve, 2000))
+      const transactionId = `DEV_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 
       // Confirm booking and process payment
       const response = await fetch('/api/bookings/confirm', {
@@ -111,9 +154,7 @@ export function CheckoutForm({ booking }: CheckoutFormProps) {
           bookingId: booking.id,
           paymentMethod: 'CREDIT_CARD',
           amount: booking.totalAmount,
-          // In production, send payment processor's transaction ID
-          transactionId: `sim_${Date.now()}`, 
-          // Payment data would be processed by payment processor, not sent to backend
+          transactionId: transactionId,
         })
       })
 
@@ -149,11 +190,12 @@ export function CheckoutForm({ booking }: CheckoutFormProps) {
       <div className="bg-blue-50 border-l-4 border-blue-400 p-4 text-sm text-blue-800">
         <p className="font-semibold mb-1">Development Mode</p>
         <p>This is a simulated payment form. All submissions will be approved.</p>
+        <p className="text-xs mt-2">Ready for 3DS payment processor integration</p>
       </div>
 
       {/* Payment Method Header */}
       <div className="flex items-center gap-2 pb-4 border-b">
-        <CreditCard className="h-5 w-5 text-brand-gold-600" />
+        <CreditCard className="h-5 w-5 text-brand-red-600" />
         <span className="font-semibold">Credit / Debit Card</span>
       </div>
 
@@ -248,7 +290,7 @@ export function CheckoutForm({ booking }: CheckoutFormProps) {
         <Button
           type="submit"
           disabled={isProcessing}
-          className="w-full bg-black hover:bg-black/90 text-brand-gold-500 font-semibold h-14 text-lg"
+          className="w-full bg-black hover:bg-black/90 text-brand-red-500 font-semibold h-14 text-lg"
         >
           {isProcessing ? (
             <>

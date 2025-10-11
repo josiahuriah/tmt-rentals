@@ -6,7 +6,7 @@ import { Facebook, Instagram, Mail, Phone, MapPin } from "lucide-react"
 export function Footer() {
   return (
     <footer className="bg-black text-white">
-      <div className="container py-12">
+      <div className="container mx-auto px-4 py-12 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8">
           {/* Company Info */}
           <div className="space-y-4">
@@ -27,7 +27,7 @@ export function Footer() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full bg-gray-800 hover:bg-brand-gold-500 hover:text-black transition-colors flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-gray-800 hover:bg-brand-red-500 hover:text-black transition-colors flex items-center justify-center"
               >
                 <Facebook className="w-4 h-4" />
               </a>
@@ -35,7 +35,7 @@ export function Footer() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full bg-gray-800 hover:bg-brand-gold-500 hover:text-black transition-colors flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-gray-800 hover:bg-brand-red-500 hover:text-black transition-colors flex items-center justify-center"
               >
                 <Instagram className="w-4 h-4" />
               </a>
@@ -44,14 +44,14 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-brand-gold-500">
+            <h3 className="font-semibold text-lg mb-4 text-brand-red-500">
               Quick Links
             </h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/"
-                  className="text-gray-400 hover:text-brand-gold-500 transition-colors text-sm"
+                  className="text-gray-400 hover:text-brand-red-500 transition-colors text-sm"
                 >
                   Home
                 </Link>
@@ -59,7 +59,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/rental"
-                  className="text-gray-400 hover:text-brand-gold-500 transition-colors text-sm"
+                  className="text-gray-400 hover:text-brand-red-500 transition-colors text-sm"
                 >
                   Car Rentals
                 </Link>
@@ -67,7 +67,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/about"
-                  className="text-gray-400 hover:text-brand-gold-500 transition-colors text-sm"
+                  className="text-gray-400 hover:text-brand-red-500 transition-colors text-sm"
                 >
                   About Us
                 </Link>
@@ -75,7 +75,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/contact"
-                  className="text-gray-400 hover:text-brand-gold-500 transition-colors text-sm"
+                  className="text-gray-400 hover:text-brand-red-500 transition-colors text-sm"
                 >
                   Contact
                 </Link>
@@ -85,14 +85,14 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-brand-gold-500">
+            <h3 className="font-semibold text-lg mb-4 text-brand-red-500">
               Legal
             </h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/privacy"
-                  className="text-gray-400 hover:text-brand-gold-500 transition-colors text-sm"
+                  className="text-gray-400 hover:text-brand-red-500 transition-colors text-sm"
                 >
                   Privacy Policy
                 </Link>
@@ -100,7 +100,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/terms"
-                  className="text-gray-400 hover:text-brand-gold-500 transition-colors text-sm"
+                  className="text-gray-400 hover:text-brand-red-500 transition-colors text-sm"
                 >
                   Terms & Conditions
                 </Link>
@@ -108,7 +108,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/refunds"
-                  className="text-gray-400 hover:text-brand-gold-500 transition-colors text-sm"
+                  className="text-gray-400 hover:text-brand-red-500 transition-colors text-sm"
                 >
                   Refunds & Returns
                 </Link>
@@ -118,7 +118,7 @@ export function Footer() {
 
           {/* Contact Us */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-brand-gold-500">
+            <h3 className="font-semibold text-lg mb-4 text-brand-red-500">
               Contact Us
             </h3>
             <ul className="space-y-3">

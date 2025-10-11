@@ -34,9 +34,16 @@ export default async function BookingPage({
     redirect('/rental')
   }
 
+  // Convert Decimal to number
+  const categoryData = {
+    id: category.id,
+    name: category.name,
+    pricePerDay: Number(category.pricePerDay),
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12">
-      <div className="container max-w-6xl">
+      <div className="container mx-auto px-4 max-w-6xl">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Complete Your Booking</h1>
           <p className="text-muted-foreground">
@@ -52,7 +59,7 @@ export default async function BookingPage({
                 <h2 className="text-2xl font-semibold">Your Information</h2>
               </CardHeader>
               <CardContent>
-                <BookingForm category={category} />
+                 <BookingForm category={categoryData} />
               </CardContent>
             </Card>
           </div>
@@ -102,7 +109,7 @@ export default async function BookingPage({
                   <div className="pt-4 border-t space-y-2">
                     <div className="flex justify-between text-lg">
                       <span className="font-medium">Rate per day</span>
-                      <span className="font-bold text-brand-gold-600">
+                      <span className="font-bold text-brand-red-600">
                         {formatCurrency(Number(category.pricePerDay))}
                       </span>
                     </div>

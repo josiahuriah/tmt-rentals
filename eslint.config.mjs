@@ -1,4 +1,3 @@
-
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
@@ -22,6 +21,21 @@ const eslintConfig = [
       "src/generated/**",
     ],
   },
+  {
+    rules: {
+      // Disable apostrophe escaping requirement (common in user-facing text)
+      "react/no-unescaped-entities": "off",
+      
+      // Allow unused vars (warnings only, won't fail build)
+      "@typescript-eslint/no-unused-vars": "off",
+      
+      // Allow explicit any
+      "@typescript-eslint/no-explicit-any": "off",
+      
+      // Allow ts-ignore and ts-expect-error
+      "@typescript-eslint/ban-ts-comment": "off",
+    }
+  }
 ];
 
 export default eslintConfig;

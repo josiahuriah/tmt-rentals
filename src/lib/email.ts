@@ -1,8 +1,10 @@
-import { Resend } from 'resend'
-import BookingConfirmationEmail from '@/email/BookingConfirmation'
+import { NextRequest, NextResponse } from "next/server"
+import ContactMessageEmail from '@/email/ContactMessage'
+import db from "@/db/db"
 
-// Lazy instantiation - only create Resend client when needed
-function getResendClient() {
+// Lazy instantiation with dynamic import - only create Resend client when needed
+async function getResendClient() {
+  const { Resend } = await import('resend')
   const apiKey = process.env.RESEND_API_KEY
   if (!apiKey) {
     throw new Error('RESEND_API_KEY environment variable is not set')
@@ -10,58 +12,55 @@ function getResendClient() {
   return new Resend(apiKey)
 }
 
-type BookingData = {
-  bookingNumber: string
-  pickupDate: Date
-  returnDate: Date
-  numberOfDays: number
-  pricePerDay: number
-  subtotal: number
-  taxAmount: number
-  totalAmount: number
-  depositAmount: number
-  pickupFee?: number
-  additionalDriverFee?: number
-  pickupLocation: string
-  returnLocation: string
-  additionalDriver?: string | null
-  specialRequests?: string | null
-  customer: {
-    firstName: string
-    lastName: string
-    email: string
-    phone: string
-  }
-  category: {
-    name: string
-    description: string | null
-    pricePerDay?: number
-  }
-  car?: {
-    name: string
-    licensePlate: string | null
-  } | null
-}
-
-export async function sendBookingConfirmationEmail(booking: BookingData) {
+export async function POST(request: NextRequest) {
   try {
-    const resend = getResendClient()
+    const body = await request.json()
+    const { name, email, phone, subject, message } = body
+
+    // Validate required fields
+    if (!name || !email || !subject || !message) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      )
+    }
+
+    // Save to database
+    await db.contactMessage.create({
+      data: {
+        name,
+        email,
+        phone: phone || null,
+        message: `Subject: ${subject}\n\n${message}`,
+        status: "UNREAD"
+      }
+    })
+
+    // Send email to owner
+    const resend = await getResendClient()
     const { data, error } = await resend.emails.send({
       from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
-      to: booking.customer.email,
-      subject: `Booking Confirmed - ${booking.bookingNumber}`,
-      react: BookingConfirmationEmail({ booking }),
+      to: process.env.CONTACT_EMAIL || 'info@tmtsbahamas.com',
+      replyTo: email,
+      subject: `Contact Form: ${subject}`,
+      react: ContactMessageEmail({ name, email, phone, subject, message }),
     })
 
     if (error) {
       console.error('Error sending email:', error)
-      return { success: false, error }
+      return NextResponse.json(
+        { error: "Failed to send email" },
+        { status: 500 }
+      )
     }
 
-    console.log('Email sent successfully:', data)
-    return { success: true, data }
+    console.log('Contact email sent successfully:', data)
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error sending booking confirmation:', error)
-    return { success: false, error }
+    console.error("Error processing contact form:", error)
+    return NextResponse.json(
+      { error: "Failed to process contact form" },
+      { status: 500 }
+    )
   }
 }

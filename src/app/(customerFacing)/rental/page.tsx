@@ -7,6 +7,9 @@ import db from "@/db/db"
 import { formatCurrency } from "@/lib/formatters"
 import { RentalCalendar } from "@/components/customer/RentalCalendar"
 
+// Force dynamic rendering since we fetch from database
+export const dynamic = 'force-dynamic'
+
 async function getCategories() {
   return db.carCategory.findMany({
     where: { isActive: true },

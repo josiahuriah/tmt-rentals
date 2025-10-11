@@ -5,11 +5,13 @@ import db from "@/db/db"
 import { formatCurrency } from "@/lib/formatters"
 import { startOfMonth, endOfMonth, startOfYear } from "date-fns"
 
+// Force dynamic rendering since we fetch from database
+export const dynamic = 'force-dynamic'
+
 async function getDashboardData() {
   const now = new Date()
   const startOfCurrentMonth = startOfMonth(now)
   const endOfCurrentMonth = endOfMonth(now)
-  const startOfCurrentYear = startOfYear(now)
 
   // Total revenue (completed bookings)
   const revenueData = await db.payment.aggregate({

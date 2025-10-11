@@ -7,16 +7,14 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Calendar as CalendarIcon, Info } from "lucide-react"
+import type { DateRange } from "react-day-picker"
 
 export function RentalCalendar() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const today = startOfDay(new Date())
   
-  const [dateRange, setDateRange] = useState<{
-    from: Date
-    to?: Date
-  }>({
+  const [dateRange, setDateRange] = useState<DateRange>({
     from: today,
     to: addDays(today, 3)
   })
@@ -33,7 +31,7 @@ export function RentalCalendar() {
     }
   }, [])
 
-  const handleDateSelect = (range: { from: Date; to?: Date } | undefined) => {
+  const handleDateSelect = (range: DateRange | undefined) => {
     if (!range?.from) return
 
     let fromDate = range.from

@@ -1,5 +1,5 @@
 import db from '@/db/db'
-import { addDays, isWithinInterval, parseISO } from 'date-fns'
+import { addDays } from 'date-fns'
 
 export async function checkCategoryAvailability(
   categoryId: string,

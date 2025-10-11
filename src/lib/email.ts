@@ -3,7 +3,37 @@ import BookingConfirmationEmail from '@/email/BookingConfirmation'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-export async function sendBookingConfirmationEmail(booking: any) {
+type BookingData = {
+  bookingNumber: string
+  pickupDate: Date
+  returnDate: Date
+  numberOfDays: number
+  pricePerDay: number
+  subtotal: number
+  taxAmount: number
+  totalAmount: number
+  depositAmount: number
+  pickupLocation: string
+  returnLocation: string
+  additionalDriver?: string | null
+  specialRequests?: string | null
+  customer: {
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+  }
+  category: {
+    name: string
+    description: string | null
+  }
+  car?: {
+    name: string
+    licensePlate: string | null
+  } | null
+}
+
+export async function sendBookingConfirmationEmail(booking: BookingData) {
   try {
     const { data, error } = await resend.emails.send({
       from: process.env.EMAIL_FROM || 'onboarding@resend.dev',

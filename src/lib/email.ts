@@ -1,7 +1,14 @@
 import { Resend } from 'resend'
 import BookingConfirmationEmail from '@/email/BookingConfirmation'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy instantiation - only create Resend client when needed
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY environment variable is not set')
+  }
+  return new Resend(apiKey)
+}
 
 type BookingData = {
   bookingNumber: string
@@ -38,6 +45,7 @@ type BookingData = {
 
 export async function sendBookingConfirmationEmail(booking: BookingData) {
   try {
+    const resend = getResendClient()
     const { data, error } = await resend.emails.send({
       from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
       to: booking.customer.email,

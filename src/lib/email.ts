@@ -1,6 +1,4 @@
-import { NextRequest, NextResponse } from "next/server"
-import ContactMessageEmail from '@/email/ContactMessage'
-import db from "@/db/db"
+import BookingConfirmationEmail from '@/email/BookingConfirmation'
 
 // Lazy instantiation with dynamic import - only create Resend client when needed
 async function getResendClient() {
@@ -12,55 +10,58 @@ async function getResendClient() {
   return new Resend(apiKey)
 }
 
-export async function POST(request: NextRequest) {
+type BookingData = {
+  bookingNumber: string
+  pickupDate: Date
+  returnDate: Date
+  numberOfDays: number
+  pricePerDay: number
+  subtotal: number
+  taxAmount: number
+  totalAmount: number
+  depositAmount: number
+  pickupFee?: number
+  additionalDriverFee?: number
+  pickupLocation: string
+  returnLocation: string
+  additionalDriver?: string | null
+  specialRequests?: string | null
+  customer: {
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+  }
+  category: {
+    name: string
+    description: string | null
+    pricePerDay?: number
+  }
+  car?: {
+    name: string
+    licensePlate: string | null
+  } | null
+}
+
+export async function sendBookingConfirmationEmail(booking: BookingData) {
   try {
-    const body = await request.json()
-    const { name, email, phone, subject, message } = body
-
-    // Validate required fields
-    if (!name || !email || !subject || !message) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      )
-    }
-
-    // Save to database
-    await db.contactMessage.create({
-      data: {
-        name,
-        email,
-        phone: phone || null,
-        message: `Subject: ${subject}\n\n${message}`,
-        status: "UNREAD"
-      }
-    })
-
-    // Send email to owner
     const resend = await getResendClient()
     const { data, error } = await resend.emails.send({
       from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
-      to: process.env.CONTACT_EMAIL || 'info@tmtsbahamas.com',
-      replyTo: email,
-      subject: `Contact Form: ${subject}`,
-      react: ContactMessageEmail({ name, email, phone, subject, message }),
+      to: booking.customer.email,
+      subject: `Booking Confirmed - ${booking.bookingNumber}`,
+      react: BookingConfirmationEmail({ booking }),
     })
 
     if (error) {
       console.error('Error sending email:', error)
-      return NextResponse.json(
-        { error: "Failed to send email" },
-        { status: 500 }
-      )
+      return { success: false, error }
     }
 
-    console.log('Contact email sent successfully:', data)
-    return NextResponse.json({ success: true })
+    console.log('Email sent successfully:', data)
+    return { success: true, data }
   } catch (error) {
-    console.error("Error processing contact form:", error)
-    return NextResponse.json(
-      { error: "Failed to process contact form" },
-      { status: 500 }
-    )
+    console.error('Error sending booking confirmation:', error)
+    return { success: false, error }
   }
 }

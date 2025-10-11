@@ -13,6 +13,8 @@ type BookingData = {
   taxAmount: number
   totalAmount: number
   depositAmount: number
+  pickupFee?: number
+  additionalDriverFee?: number
   pickupLocation: string
   returnLocation: string
   additionalDriver?: string | null
@@ -26,6 +28,7 @@ type BookingData = {
   category: {
     name: string
     description: string | null
+    pricePerDay?: number
   }
   car?: {
     name: string

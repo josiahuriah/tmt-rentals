@@ -34,8 +34,24 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    // Convert Decimal fields to numbers for email
+    const bookingForEmail = {
+      ...booking,
+      pricePerDay: Number(booking.pricePerDay),
+      subtotal: Number(booking.subtotal),
+      taxAmount: Number(booking.taxAmount),
+      totalAmount: Number(booking.totalAmount),
+      depositAmount: Number(booking.depositAmount),
+      pickupFee: Number(booking.pickupFee),
+      additionalDriverFee: Number(booking.additionalDriverFee),
+      category: {
+        ...booking.category,
+        pricePerDay: Number(booking.category.pricePerDay)
+      }
+    }
+
     // Send confirmation email
-    await sendBookingConfirmationEmail(booking)
+    await sendBookingConfirmationEmail(bookingForEmail)
 
     return NextResponse.json({ success: true })
   } catch (error) {

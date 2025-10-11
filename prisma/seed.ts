@@ -1,24 +1,9 @@
 import { PrismaClient } from "../src/generated/prisma"
-// import { hash } from "bcryptjs"
 
 const prisma = new PrismaClient()
 
 async function main() {
   console.log("🌱 Starting seed...")
-
-  // Create admin user
-//   const adminPassword = await hash("admin123", 10)
-//   const admin = await prisma.admin.upsert({
-//     where: { email: "admin@tmtsbahamas.com" },
-//     update: {},
-//     create: {
-//       email: "admin@tmtsbahamas.com",
-//       password: adminPassword,
-//       name: "Admin User",
-//       role: "SUPER_ADMIN"
-//     }
-//   })
-//   console.log("✅ Created admin user:", admin.email)
 
   // Create car categories
   const categories = [
@@ -90,7 +75,7 @@ async function main() {
     where: { name: "Luxury" }
   })
 
-  // Create cars
+  // Create cars - using upsert to handle existing data
   const cars = [
     // Economy
     {
@@ -199,10 +184,19 @@ async function main() {
   ]
 
   for (const car of cars) {
-    const created = await prisma.car.create({
-      data: car
+    const created = await prisma.car.upsert({
+      where: { licensePlate: car.licensePlate },
+      update: {
+        name: car.name,
+        model: car.model,
+        year: car.year,
+        color: car.color,
+        categoryId: car.categoryId,
+        status: car.status
+      },
+      create: car
     })
-    console.log("✅ Created car:", created.name, created.licensePlate)
+    console.log("✅ Created/Updated car:", created.name, created.licensePlate)
   }
 
   console.log("🎉 Seeding completed!")

@@ -8,12 +8,15 @@
     "start": "next start",
     "db:seed": "prisma db seed",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "test:fygaro": "tsx scripts/test-fygaro.ts",
+    "diagnose:fygaro": "tsx scripts/diagnose-fygaro.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@fygaro/webhook": "^1.2.0",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/client": "^6.17.0",
     "@radix-ui/react-checkbox": "^1.3.3",
@@ -27,6 +30,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
     "lucide-react": "^0.544.0",
     "next": "15.5.3",
     "react": "19.1.0",
@@ -47,6 +51,7 @@
     "autoprefixer": "^10",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
+    "ngrok": "^5.0.0-beta.2",
     "postcss": "^8",
     "prisma": "^6.17.0",
     "react-email": "4.2.12",

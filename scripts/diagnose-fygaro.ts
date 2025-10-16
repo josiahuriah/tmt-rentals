@@ -19,6 +19,14 @@ if (!API_KEY || !API_SECRET) {
   process.exit(1)
 }
 
+// Add type assertions to help TypeScript
+const apiKey: string = API_KEY
+const apiSecret: string = API_SECRET
+
+// Then use these instead:
+console.log('Credentials loaded:')
+console.log(`  API Key: ${apiKey.substring(0, 8)}...`)
+console.log(`  API Secret: ${apiSecret.substring(0, 8)}...`)
 // Possible API endpoints to try
 const ENDPOINTS_TO_TRY = [
   'https://api.fygaro.com/v1/payment_links',

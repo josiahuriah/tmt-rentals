@@ -74,18 +74,20 @@ export async function POST(request: NextRequest) {
 
     // Verify webhook signature using official Fygaro package
     const validator = new FygaroWebhookValidator({
-      [keyId]: webhookSecret
+        secrets: {
+            [keyId]: webhookSecret
+    }
     })
 
     let isValid = false
     try {
-      isValid = validator.verify_signature(signature, rawBody)
+        isValid = validator.verify_signature(signature, rawBody)
     } catch (error) {
-      console.error('Webhook signature verification failed:', error)
-      return NextResponse.json(
-        { error: 'Invalid webhook signature' },
-        { status: 401 }
-      )
+        console.error('Webhook signature verification failed:', error)
+        return NextResponse.json(
+            { error: 'Invalid webhook signature' },
+            { status: 401 }
+    )
     }
 
     if (!isValid) {

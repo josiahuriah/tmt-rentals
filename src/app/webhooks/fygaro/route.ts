@@ -61,6 +61,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    
+
     // Get webhook secret from environment
     const webhookSecret = process.env.FYGARO_WEBHOOK_SECRET
 
@@ -73,24 +75,21 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify webhook signature using official Fygaro package
-    const validator = new FygaroWebhookValidator({
-        secrets: {
-            [keyId]: webhookSecret
-    }
-    })
+    // Pass the secret as a single-element array
+    const validator = new FygaroWebhookValidator([webhookSecret])
 
-    let isValid = false
+    let signatureValid = false
     try {
-        isValid = validator.verify_signature(signature, rawBody)
+      signatureValid = validator.verifySignature(signature, rawBody)
     } catch (error) {
-        console.error('Webhook signature verification failed:', error)
-        return NextResponse.json(
-            { error: 'Invalid webhook signature' },
-            { status: 401 }
-    )
+      console.error('Webhook signature verification failed:', error)
+      return NextResponse.json(
+        { error: 'Invalid webhook signature' },
+        { status: 401 }
+      )
     }
 
-    if (!isValid) {
+    if (!signatureValid) {
       console.error('Webhook signature validation failed')
       return NextResponse.json(
         { error: 'Invalid webhook signature' },
@@ -99,23 +98,23 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse the verified payload
-    const payload: FygaroWebhookPayload = JSON.parse(rawBody)
+    const webhookPayload: FygaroWebhookPayload = JSON.parse(rawBody)
 
     console.log('Received verified Fygaro webhook:', {
-      transactionId: payload.transactionId,
-      reference: payload.reference,
-      amount: payload.amount,
-      currency: payload.currency
+      transactionId: webhookPayload.transactionId,
+      reference: webhookPayload.reference,
+      amount: webhookPayload.amount,
+      currency: webhookPayload.currency
     })
 
     // Find booking by reference (booking number)
     const booking = await db.booking.findFirst({
-      where: { bookingNumber: payload.reference },
+      where: { bookingNumber: webhookPayload.reference },
       include: { customer: true }
     })
 
     if (!booking) {
-      console.error('Booking not found for reference:', payload.reference)
+      console.error('Booking not found for reference:', webhookPayload.reference)
       // Still return 200 to Fygaro to prevent retries
       return NextResponse.json(
         { received: true, warning: 'Booking not found' },
@@ -124,7 +123,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify amount matches (convert Fygaro's string to number)
-    const webhookAmount = parseFloat(payload.amount)
+    const webhookAmount = parseFloat(webhookPayload.amount)
     const bookingAmount = Number(booking.totalAmount)
     
     if (Math.abs(webhookAmount - bookingAmount) > 0.01) {
@@ -150,11 +149,11 @@ export async function POST(request: NextRequest) {
         status: 'CONFIRMED',
         paymentStatus: 'PAID',
         internalNotes: `Payment completed via Fygaro
-Transaction ID: ${payload.transactionId}
-Auth Code: ${payload.authCode || 'N/A'}
-Card: ${payload.card?.brand || 'Unknown'} ending in ${payload.card?.last4 || 'N/A'}
-Amount: ${payload.amount} ${payload.currency}
-Processed: ${payload.createdAt}
+Transaction ID: ${webhookPayload.transactionId}
+Auth Code: ${webhookPayload.authCode || 'N/A'}
+Card: ${webhookPayload.card?.brand || 'Unknown'} ending in ${webhookPayload.card?.last4 || 'N/A'}
+Amount: ${webhookPayload.amount} ${webhookPayload.currency}
+Processed: ${webhookPayload.createdAt}
 
 ${booking.internalNotes || ''}`
       }

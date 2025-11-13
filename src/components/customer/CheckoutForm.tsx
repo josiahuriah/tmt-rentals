@@ -85,8 +85,7 @@ export function CheckoutForm({ booking }: CheckoutFormProps) {
             </h3>
             <p className="text-sm text-green-800">
               You'll be redirected to our secure payment partner, Fygaro, to complete
-              your payment. Fygaro is PCI DSS Level 1 certified and uses advanced
-              3D Secure authentication to protect your transaction.
+              your payment.
             </p>
           </div>
         </div>
@@ -125,17 +124,7 @@ export function CheckoutForm({ booking }: CheckoutFormProps) {
 
       {/* Security Features */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
-          <Lock className="h-5 w-5 text-gray-600 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="font-semibold text-sm text-gray-900">
-              256-bit Encryption
-            </p>
-            <p className="text-xs text-gray-600">
-              Bank-level security for all transactions
-            </p>
-          </div>
-        </div>
+        
 
         <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
           <ShieldCheck className="h-5 w-5 text-gray-600 flex-shrink-0 mt-0.5" />
@@ -157,8 +146,6 @@ export function CheckoutForm({ booking }: CheckoutFormProps) {
           <div className="text-2xl">💳</div>
           <span className="text-sm font-medium">Visa</span>
           <span className="text-sm font-medium">Mastercard</span>
-          <span className="text-sm font-medium">American Express</span>
-          <span className="text-sm font-medium">Discover</span>
         </div>
       </div>
 
@@ -180,19 +167,14 @@ export function CheckoutForm({ booking }: CheckoutFormProps) {
             </>
           )}
         </Button>
-        <p className="text-xs text-center text-muted-foreground mt-3">
-          By proceeding, you agree to complete payment through our secure
-          payment partner, Fygaro
-        </p>
       </div>
 
       {/* Additional Information */}
       <div className="bg-blue-50 p-4 rounded-lg text-sm text-blue-800">
         <p className="font-semibold mb-2">What happens next?</p>
         <ul className="space-y-1 text-xs">
-          <li>• You'll be redirected to Fygaro's secure payment page</li>
-          <li>• Enter your card details on their PCI-compliant platform</li>
-          <li>• Complete 3D Secure verification if required by your bank</li>
+          <li>• You'll be redirected to Fygaro's payment page</li>
+          <li>• Enter your payment details on their secure platform</li>
           <li>• Return to our site for your booking confirmation</li>
         </ul>
       </div>
